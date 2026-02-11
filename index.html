@@ -6,166 +6,66 @@
     <title>For Isabella ❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff0f3;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-        }
-        .card {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.2);
-            max-width: 90%;
-            width: 400px;
-            z-index: 5;
-            position: relative;
-        }
-        .big-emoji { font-size: 80px; margin-bottom: 10px; display: block; }
-        h1 { color: #ff4b6e; font-size: 28px; margin-bottom: 30px; line-height: 1.4; }
-        
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            min-height: 60px;
-        }
-
-        #yesBtn {
-            padding: 12px 35px;
-            font-size: 18px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            background-color: #ff4b6e;
-            color: white;
-        }
-
-        #noBtn {
-            padding: 12px 35px;
-            font-size: 18px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            background-color: #f0f0f0;
-            color: #888;
-            position: fixed; 
-            z-index: 999;
-            transition: 0.1s ease-out;
-            font-weight: bold;
-            left: 55%; 
-            top: 50%;
-        }
-
-        .phrase {
-            position: fixed;
-            color: #ff4b6e;
-            font-weight: 900;
-            font-size: 24px;
-            pointer-events: none;
-            z-index: 1000;
-            text-shadow: 2px 2px 0px white;
-            animation: floatAndFade 2s forwards;
-        }
-
-        @keyframes floatAndFade {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-100px); }
-        }
-
+        body { margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #fff0f3; font-family: sans-serif; overflow: hidden; }
+        .card { text-align: center; background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(255, 75, 110, 0.2); width: 350px; z-index: 5; position: relative; }
+        h1 { color: #ff4b6e; font-size: 24px; margin-bottom: 30px; }
+        #yesBtn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 15px; cursor: pointer; background-color: #ff4b6e; color: white; font-weight: bold; }
+        #noBtn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 15px; cursor: pointer; background-color: #f0f0f0; color: #888; position: fixed; z-index: 999; font-weight: bold; left: 55%; top: 50%; }
+        .phrase { position: fixed; color: #ff4b6e; font-weight: 900; font-size: 22px; pointer-events: none; z-index: 1000; text-shadow: 2px 2px 0 white; animation: float 2s forwards; }
+        @keyframes float { 0% { opacity: 1; } 100% { opacity: 0; transform: translateY(-100px); } }
         .hidden { display: none; }
-        #celebrationGif { 
-            width: 100%; 
-            border-radius: 15px; 
-            margin-top: 20px; 
-            display: block;
-        }
+        img { width: 100%; border-radius: 15px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="card" id="mainCard">
         <div id="askContainer">
-            <span class="big-emoji">💝</span>
+            <div style="font-size: 60px;">💝</div>
             <h1>Isabella, will you be my valentine!</h1>
-            <div class="btn-container">
-                <button id="yesBtn">Yes!</button>
-                <button id="noBtn">No</button>
-            </div>
+            <button id="yesBtn">Yes!</button>
+            <button id="noBtn">No</button>
         </div>
 
         <div id="successContainer" class="hidden">
-            <span class="big-emoji">💖</span>
+            <div style="font-size: 60px;">💖</div>
             <h1>Yay! Best Valentine's ever!</h1>
-            <img id="celebrationGif" src="https://media.tenor.com/pbGzvMIkSFcAAAAM/tkthao219-bubududu.gif" alt="Happy Bears">
-            <div id="fallback" style="display:none; font-size: 50px;">🤟🥰🤟</div>
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5Mmt5Z3lyZzR1eXp5eXp5eXp5eXp5eXp5eXp5eXp5eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/c90m4619v7G11p5y49/giphy.gif">
         </div>
     </div>
 
     <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const askContainer = document.getElementById('askContainer');
-        const successContainer = document.getElementById('successContainer');
-        const gif = document.getElementById('celebrationGif');
-        const fallback = document.getElementById('fallback');
+        const phrases = ["Nice try diddy! 😂", "Wait! 🛑", "Error 404 🤖", "Nope! 🙅‍♀️", "Try again! 😉"];
 
-        // Check if GIF fails to load and show emoji instead
-        gif.onerror = function() {
-            gif.style.display = 'none';
-            fallback.style.display = 'block';
-        };
-        
-        const phrases = ["Nice try diddy! 😂", "Wait! 🛑", "Error 404 🤖", "Try again! 😉", "Nope! 🙅‍♀️"];
-
-        const moveButton = () => {
-            const padding = 50;
-            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-            const newX = Math.max(padding, Math.random() * maxX);
-            const newY = Math.max(padding, Math.random() * maxY);
-
-            noBtn.style.left = `${newX}px`;
-            noBtn.style.top = `${newY}px`;
-
-            const phrase = document.createElement('div');
-            phrase.className = 'phrase';
-            phrase.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-            phrase.style.left = `${newX}px`;
-            phrase.style.top = `${newY - 40}px`;
-            document.body.appendChild(phrase);
-            setTimeout(() => phrase.remove(), 2000);
+        const move = () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+            const p = document.createElement('div');
+            p.className = 'phrase';
+            p.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            p.style.left = `${x}px`; p.style.top = `${y - 40}px`;
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 2000);
         };
 
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+        noBtn.addEventListener('mouseover', move);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); move(); });
 
         yesBtn.addEventListener('click', () => {
-            askContainer.classList.add('hidden');
-            successContainer.classList.remove('hidden');
+            document.getElementById('askContainer').classList.add('hidden');
+            document.getElementById('successContainer').classList.remove('hidden');
             
-            // HEART EXPLOSION
-            const duration = 5 * 1000;
-            const animationEnd = Date.now() + duration;
-
-            const interval = setInterval(function() {
-              const timeLeft = animationEnd - Date.now();
-              if (timeLeft <= 0) return clearInterval(interval);
-
-              confetti({
-                particleCount: 40,
-                spread: 70,
-                origin: { x: Math.random(), y: Math.random() - 0.2 },
-                shapes: [confetti.shapeFromText({ text: '❤️' }), confetti.shapeFromText({ text: '💖' })]
-              });
-            }, 200);
+            // HEART RAIN
+            var end = Date.now() + (5 * 1000);
+            (function frame() {
+              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, shapes: [confetti.shapeFromText({text:'❤️'})] });
+              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, shapes: [confetti.shapeFromText({text:'💖'})] });
+              if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
         });
     </script>
 </body>
