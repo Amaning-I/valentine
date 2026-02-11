@@ -81,7 +81,12 @@
         }
 
         .hidden { display: none; }
-        #celebrationGif { width: 100%; border-radius: 15px; margin-top: 20px; display: block; }
+        #celebrationGif { 
+            width: 100%; 
+            border-radius: 15px; 
+            margin-top: 20px; 
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +104,8 @@
         <div id="successContainer" class="hidden">
             <span class="big-emoji">💖</span>
             <h1>Yay! Best Valentine's ever!</h1>
-            <img id="celebrationGif" src="https://tenor.com/pbGzvMIkSFc.gif" alt="Happy Bears"> 
+            <img id="celebrationGif" src="https://media.tenor.com/pbGzvMIkSFcAAAAM/tkthao219-bubududu.gif" alt="Happy Bears">
+            <div id="fallback" style="display:none; font-size: 50px;">🤟🥰🤟</div>
         </div>
     </div>
 
@@ -108,6 +114,14 @@
         const yesBtn = document.getElementById('yesBtn');
         const askContainer = document.getElementById('askContainer');
         const successContainer = document.getElementById('successContainer');
+        const gif = document.getElementById('celebrationGif');
+        const fallback = document.getElementById('fallback');
+
+        // Check if GIF fails to load and show emoji instead
+        gif.onerror = function() {
+            gif.style.display = 'none';
+            fallback.style.display = 'block';
+        };
         
         const phrases = ["Nice try diddy! 😂", "Wait! 🛑", "Error 404 🤖", "Try again! 😉", "Nope! 🙅‍♀️"];
 
@@ -137,17 +151,21 @@
             askContainer.classList.add('hidden');
             successContainer.classList.remove('hidden');
             
-            // HEART EXPLOSION ANIMATION
-            const scalar = 2;
-            const heart = confetti.shapeFromText({ text: '❤️', scalar });
+            // HEART EXPLOSION
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
 
-            confetti({
-                shapes: [heart],
-                particleCount: 100,
-                spread: 90,
-                origin: { y: 0.6 },
-                scalar
-            });
+            const interval = setInterval(function() {
+              const timeLeft = animationEnd - Date.now();
+              if (timeLeft <= 0) return clearInterval(interval);
+
+              confetti({
+                particleCount: 40,
+                spread: 70,
+                origin: { x: Math.random(), y: Math.random() - 0.2 },
+                shapes: [confetti.shapeFromText({ text: '❤️' }), confetti.shapeFromText({ text: '💖' })]
+              });
+            }, 200);
         });
     </script>
 </body>
