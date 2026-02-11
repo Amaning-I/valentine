@@ -6,13 +6,81 @@
     <title>For Isabella ❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #fff0f3; font-family: sans-serif; overflow: hidden; }
-        .card { text-align: center; background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(255, 75, 110, 0.2); width: 350px; z-index: 5; position: relative; }
+        body { 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background-color: #fff0f3; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            overflow: hidden; 
+        }
+        .card { 
+            text-align: center; 
+            background: white; 
+            padding: 40px; 
+            border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.2); 
+            width: 350px; 
+            z-index: 5; 
+            position: relative; 
+        }
         h1 { color: #ff4b6e; font-size: 24px; margin-bottom: 30px; }
-        #yesBtn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 15px; cursor: pointer; background-color: #ff4b6e; color: white; font-weight: bold; }
-        #noBtn { padding: 12px 35px; font-size: 18px; border: none; border-radius: 15px; cursor: pointer; background-color: #f0f0f0; color: #888; position: fixed; z-index: 999; font-weight: bold; left: 55%; top: 50%; }
-        .phrase { position: fixed; color: #ff4b6e; font-weight: 900; font-size: 22px; pointer-events: none; z-index: 1000; text-shadow: 2px 2px 0 white; animation: float 2s forwards; }
-        @keyframes float { 0% { opacity: 1; } 100% { opacity: 0; transform: translateY(-100px); } }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-height: 60px;
+        }
+
+        #yesBtn { 
+            padding: 12px 35px; 
+            font-size: 18px; 
+            border: none; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            background-color: #ff4b6e; 
+            color: white; 
+            font-weight: bold; 
+            transition: 0.2s;
+        }
+        #yesBtn:hover { transform: scale(1.1); }
+
+        #noBtn { 
+            padding: 12px 35px; 
+            font-size: 18px; 
+            border: none; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            background-color: #f0f0f0; 
+            color: #888; 
+            position: fixed; 
+            z-index: 999; 
+            font-weight: bold; 
+            left: 55%; 
+            top: 50%;
+            transition: 0.1s ease-out;
+        }
+
+        .phrase { 
+            position: fixed; 
+            color: #ff4b6e; 
+            font-weight: 900; 
+            font-size: 22px; 
+            pointer-events: none; 
+            z-index: 1000; 
+            text-shadow: 2px 2px 0 white; 
+            animation: float 2s forwards; 
+        }
+
+        @keyframes float { 
+            0% { opacity: 1; transform: scale(1); } 
+            100% { opacity: 0; transform: translateY(-100px) scale(1.2); } 
+        }
+
         .hidden { display: none; }
         img { width: 100%; border-radius: 15px; margin-top: 20px; }
     </style> 
@@ -23,8 +91,10 @@
         <div id="askContainer">
             <div style="font-size: 60px;">💝</div>
             <h1>Isabella, will you be my valentine!</h1>
-            <button id="yesBtn">Yes!</button>
-            <button id="noBtn">No</button>
+            <div class="btn-container">
+                <button id="yesBtn">Yes!</button>
+                <button id="noBtn">No</button>
+            </div>
         </div>
 
         <div id="successContainer" class="hidden">
@@ -37,29 +107,39 @@
     <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
+        const askContainer = document.getElementById('askContainer');
+        const successContainer = document.getElementById('successContainer');
+        
         const phrases = ["Nice try diddy! 😂", "Wait! 🛑", "Error 404 🤖", "Nope! 🙅‍♀️", "Try again! 😉"];
 
         const move = () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            const padding = 50;
+            const x = Math.max(padding, Math.random() * (window.innerWidth - noBtn.offsetWidth - padding));
+            const y = Math.max(padding, Math.random() * (window.innerHeight - noBtn.offsetHeight - padding));
+            
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
+
             const p = document.createElement('div');
             p.className = 'phrase';
             p.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-            p.style.left = `${x}px`; p.style.top = `${y - 40}px`;
+            p.style.left = `${x}px`; 
+            p.style.top = `${y - 40}px`;
+            
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 2000);
         };
 
+        // Runaway logic
         noBtn.addEventListener('mouseover', move);
         noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); move(); });
 
+        // Yes logic + Fireworks
         yesBtn.addEventListener('click', () => {
-            document.getElementById('askContainer').classList.add('hidden');
-            document.getElementById('successContainer').classList.remove('hidden');
+            askContainer.classList.add('hidden');
+            successContainer.classList.remove('hidden');
             
-            // --- NEW IMPROVED HEART FIREWORKS ---
+            // --- THE HEART FIREWORKS ---
             const duration = 5 * 1000;
             const animationEnd = Date.now() + duration;
             const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -77,7 +157,7 @@
 
                 const particleCount = 50 * (timeLeft / duration);
                 
-                // Launch hearts from the left side
+                // Firework Left
                 confetti({
                     ...defaults,
                     particleCount,
@@ -85,7 +165,7 @@
                     shapes: [confetti.shapeFromText({ text: '❤️' })]
                 });
                 
-                // Launch hearts from the right side
+                // Firework Right
                 confetti({
                     ...defaults,
                     particleCount,
