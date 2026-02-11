@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Isabella ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff0f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        .card {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.2);
+            max-width: 90%;
+            width: 400px;
+            z-index: 5;
+        }
+        .big-emoji {
+            font-size: 80px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        h1 {
+            color: #ff4b6e;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 50px;
+        }
+        button {
+            padding: 12px 35px;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        #yesBtn {
+            background-color: #ff4b6e;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 110, 0.4);
+        }
+        #noBtn {
+            background-color: #f0f0f0;
+            color: #888;
+            position: absolute; /* Needed for the runaway effect */
+        }
+        .hidden { display: none; }
+        #celebrationGif {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <div id="askContainer">
+            <span class="big-emoji">💝</span>
+            <h1>Isabella, will you be my valentine!</h1>
+            <div class="btn-container">
+                <button id="yesBtn">Yes!</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div id="successContainer" class="hidden">
+            <span class="big-emoji">💖</span>
+            <h1>Yay! Best Valentine's ever!</h1>
+            <img id="celebrationGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5Mmt5Z3lyZzR1eXp5eXp5eXp5eXp5eXp5eXp5eXp5eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/c90m4619v7G11p5y49/giphy.gif" alt="Happy Dance">
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const askContainer = document.getElementById('askContainer');
+        const successContainer = document.getElementById('successContainer');
+
+        // The "Runaway" logic - moves when hovered or touched
+        const moveButton = () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        };
+
+        noBtn.addEventListener('mouseenter', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevents clicking on mobile
+            moveButton();
+        });
+
+        // The "Yes" logic
+        yesBtn.addEventListener('click', () => {
+            askContainer.classList.add('hidden');
+            successContainer.classList.remove('hidden');
+            
+            // Confetti Cannon!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4b6e', '#ff80ab', '#ffffff']
+            });
+        });
+    </script>
+</body>
+</html>
