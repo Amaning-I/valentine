@@ -30,8 +30,7 @@
         <div id="successContainer" class="hidden">
             <div style="font-size: 60px;">💖</div>
             <h1>Yay! Best Valentine's ever!</h1>
-        <img src="kissing-cat.gif" alt="Kissing Cats">
-
+            <img src="kissing-cat.gif" alt="Kissing Cats">
         </div>
     </div>
 
@@ -60,13 +59,40 @@
             document.getElementById('askContainer').classList.add('hidden');
             document.getElementById('successContainer').classList.remove('hidden');
             
-            // HEART RAIN
-            var end = Date.now() + (5 * 1000);
-            (function frame() {
-              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, shapes: [confetti.shapeFromText({text:'❤️'})] });
-              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, shapes: [confetti.shapeFromText({text:'💖'})] });
-              if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
+            // --- NEW IMPROVED HEART FIREWORKS ---
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                
+                // Launch hearts from the left side
+                confetti({
+                    ...defaults,
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    shapes: [confetti.shapeFromText({ text: '❤️' })]
+                });
+                
+                // Launch hearts from the right side
+                confetti({
+                    ...defaults,
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    shapes: [confetti.shapeFromText({ text: '💖' })]
+                });
+            }, 250);
         });
     </script>
 </body>
