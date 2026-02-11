@@ -56,11 +56,10 @@
             cursor: pointer;
             background-color: #f0f0f0;
             color: #888;
-            position: fixed; /* Changed to fixed so it doesn't get lost in the card */
+            position: fixed; 
             z-index: 999;
             transition: 0.1s ease-out;
             font-weight: bold;
-            /* Initial position */
             left: 55%; 
             top: 50%;
         }
@@ -100,7 +99,7 @@
         <div id="successContainer" class="hidden">
             <span class="big-emoji">💖</span>
             <h1>Yay! Best Valentine's ever!</h1>
-            <img id="celebrationGif" src="https://c.tenor.com/pbGzvMIkSFcAAAAC/tenor.gif" alt="Happy Bears">
+            <img id="celebrationGif" src="https://i.imgur.com/v9F8qjW.gif" alt="Happy Bears">
         </div>
     </div>
 
@@ -113,11 +112,9 @@
         const phrases = ["Nice try diddy! 😂", "Wait! 🛑", "Error 404 🤖", "Try again! 😉", "Nope! 🙅‍♀️"];
 
         const moveButton = () => {
-            // This math ensures it stays inside the visible screen window
             const padding = 50;
             const maxX = window.innerWidth - noBtn.offsetWidth - padding;
             const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-            
             const newX = Math.max(padding, Math.random() * maxX);
             const newY = Math.max(padding, Math.random() * maxY);
 
@@ -129,7 +126,6 @@
             phrase.innerText = phrases[Math.floor(Math.random() * phrases.length)];
             phrase.style.left = `${newX}px`;
             phrase.style.top = `${newY - 40}px`;
-            
             document.body.appendChild(phrase);
             setTimeout(() => phrase.remove(), 2000);
         };
@@ -140,7 +136,18 @@
         yesBtn.addEventListener('click', () => {
             askContainer.classList.add('hidden');
             successContainer.classList.remove('hidden');
-            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+            
+            // HEART EXPLOSION ANIMATION
+            const scalar = 2;
+            const heart = confetti.shapeFromText({ text: '❤️', scalar });
+
+            confetti({
+                shapes: [heart],
+                particleCount: 100,
+                spread: 90,
+                origin: { y: 0.6 },
+                scalar
+            });
         });
     </script>
 </body>
