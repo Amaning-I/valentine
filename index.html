@@ -13,7 +13,7 @@
             align-items: center; 
             justify-content: center; 
             background-color: #fff0f3; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: sans-serif; 
             overflow: hidden; 
         }
         .card { 
@@ -27,15 +27,6 @@
             position: relative; 
         }
         h1 { color: #ff4b6e; font-size: 24px; margin-bottom: 30px; }
-        
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            min-height: 60px;
-        }
-
         #yesBtn { 
             padding: 12px 35px; 
             font-size: 18px; 
@@ -45,10 +36,7 @@
             background-color: #ff4b6e; 
             color: white; 
             font-weight: bold; 
-            transition: 0.2s;
         }
-        #yesBtn:hover { transform: scale(1.1); }
-
         #noBtn { 
             padding: 12px 35px; 
             font-size: 18px; 
@@ -61,10 +49,9 @@
             z-index: 999; 
             font-weight: bold; 
             left: 55%; 
-            top: 50%;
+            top: 50%; 
             transition: 0.1s ease-out;
         }
-
         .phrase { 
             position: fixed; 
             color: #ff4b6e; 
@@ -75,12 +62,10 @@
             text-shadow: 2px 2px 0 white; 
             animation: float 2s forwards; 
         }
-
         @keyframes float { 
-            0% { opacity: 1; transform: scale(1); } 
-            100% { opacity: 0; transform: translateY(-100px) scale(1.2); } 
+            0% { opacity: 1; } 
+            100% { opacity: 0; transform: translateY(-100px); } 
         }
-
         .hidden { display: none; }
         img { width: 100%; border-radius: 15px; margin-top: 20px; }
     </style> 
@@ -91,10 +76,8 @@
         <div id="askContainer">
             <div style="font-size: 60px;">💝</div>
             <h1>Isabella, will you be my valentine!</h1>
-            <div class="btn-container">
-                <button id="yesBtn">Yes!</button>
-                <button id="noBtn">No</button>
-            </div>
+            <button id="yesBtn">Yes!</button>
+            <button id="noBtn">No</button>
         </div>
 
         <div id="successContainer" class="hidden">
@@ -113,33 +96,26 @@
         const phrases = ["Nice try diddy! 😂", "Wait! 🛑", "Error 404 🤖", "Nope! 🙅‍♀️", "Try again! 😉"];
 
         const move = () => {
-            const padding = 50;
-            const x = Math.max(padding, Math.random() * (window.innerWidth - noBtn.offsetWidth - padding));
-            const y = Math.max(padding, Math.random() * (window.innerHeight - noBtn.offsetHeight - padding));
-            
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
-
             const p = document.createElement('div');
             p.className = 'phrase';
             p.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-            p.style.left = `${x}px`; 
-            p.style.top = `${y - 40}px`;
-            
+            p.style.left = `${x}px`; p.style.top = `${y - 40}px`;
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 2000);
         };
 
-        // Runaway logic
         noBtn.addEventListener('mouseover', move);
         noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); move(); });
 
-        // Yes logic + Fireworks
         yesBtn.addEventListener('click', () => {
             askContainer.classList.add('hidden');
             successContainer.classList.remove('hidden');
             
-            // --- THE HEART FIREWORKS ---
+            // --- FIREWORKS / HEART RAIN START ---
             const duration = 5 * 1000;
             const animationEnd = Date.now() + duration;
             const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -157,7 +133,7 @@
 
                 const particleCount = 50 * (timeLeft / duration);
                 
-                // Firework Left
+                // Fireworks from the left
                 confetti({
                     ...defaults,
                     particleCount,
@@ -165,7 +141,7 @@
                     shapes: [confetti.shapeFromText({ text: '❤️' })]
                 });
                 
-                // Firework Right
+                // Fireworks from the right
                 confetti({
                     ...defaults,
                     particleCount,
@@ -173,6 +149,7 @@
                     shapes: [confetti.shapeFromText({ text: '💖' })]
                 });
             }, 250);
+            // --- FIREWORKS END ---
         });
     </script>
 </body>
