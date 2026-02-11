@@ -29,6 +29,16 @@
         }
         .big-emoji { font-size: 80px; margin-bottom: 10px; display: block; }
         h1 { color: #ff4b6e; font-size: 28px; margin-bottom: 30px; }
+        
+        /* Buttons Container */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-height: 60px;
+        }
+
         #yesBtn {
             padding: 12px 35px;
             font-size: 18px;
@@ -38,8 +48,9 @@
             font-weight: bold;
             background-color: #ff4b6e;
             color: white;
-            transition: 0.2s;
+            z-index: 10;
         }
+
         #noBtn {
             padding: 12px 35px;
             font-size: 18px;
@@ -49,19 +60,30 @@
             background-color: #f0f0f0;
             color: #888;
             position: absolute;
-            transition: 0.1s;
+            z-index: 20; /* Keep it on top */
+            transition: 0.1s ease;
         }
+
+        /* The Silly Phrases */
         .phrase {
-            position: absolute;
+            position: fixed; /* Ensures it's on top of everything */
             color: #ff4b6e;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 20px;
             pointer-events: none;
-            animation: fadeOut 1s forwards;
+            z-index: 100;
+            animation: popOut 0.8s forwards;
+            white-space: nowrap;
         }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-20px); } }
+
+        @keyframes popOut {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1); }
+        }
+
         .hidden { display: none; }
-        #celebrationGif { width: 100%; border-radius: 15px; margin-top: 20px; }
+        #celebrationGif { width: 100%; border-radius: 15px; margin-top: 20px; display: block; }
     </style>
 </head>
 <body>
@@ -70,14 +92,16 @@
         <div id="askContainer">
             <span class="big-emoji">💝</span>
             <h1>Isabella, will you be my valentine!</h1>
-            <button id="yesBtn">Yes!</button>
-            <button id="noBtn">No</button>
+            <div class="btn-container">
+                <button id="yesBtn">Yes!</button>
+                <button id="noBtn">No</button>
+            </div>
         </div>
 
         <div id="successContainer" class="hidden">
             <span class="big-emoji">💖</span>
             <h1>Yay! Best Valentine's ever!</h1>
-            <img id="celebrationGif" src="https://media.tenor.com/gU_p9Y5wXmYAAAAi/tkthao219-bubududu.gif" alt="Happy Dance">
+            <img id="celebrationGif" src="https://media.tenor.com/7S_m_G36_pQAAAAi/bubududu-panda.gif" alt="Happy Bears">
         </div>
     </div>
 
@@ -86,31 +110,47 @@
         const yesBtn = document.getElementById('yesBtn');
         const askContainer = document.getElementById('askContainer');
         const successContainer = document.getElementById('successContainer');
-        const phrases = ["Nice try!", "Wait!!", "Wrong button!", "Are you sure?", "Think again!", "Error 404", "Not today!", "Nope!"];
+        
+        // Added your custom phrases here!
+        const phrases = ["Nice try!", "Wait!!", "Error 404", "Nice try diddy!", "Not possible!", "Try again!", "Nope!"];
 
         const moveButton = () => {
+            // Randomly move the button
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
 
-            // Create silly phrase
-            const phrase = document.createElement('span');
+            // Create and show the silly phrase right where the button is
+            const phrase = document.createElement('div');
             phrase.className = 'phrase';
             phrase.innerText = phrases[Math.floor(Math.random() * phrases.length)];
             phrase.style.left = `${x}px`;
-            phrase.style.top = `${y - 20}px`;
+            phrase.style.top = `${y - 30}px`;
             document.body.appendChild(phrase);
-            setTimeout(() => phrase.remove(), 1000);
+            
+            // Remove the phrase after animation ends
+            setTimeout(() => phrase.remove(), 800);
         };
 
-        noBtn.addEventListener('mouseenter', moveButton);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+        // Triggers for Desktop and Mobile
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            moveButton();
+        });
 
+        // "Yes" button logic
         yesBtn.addEventListener('click', () => {
             askContainer.classList.add('hidden');
             successContainer.classList.remove('hidden');
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            
+            // Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
         });
     </script>
 </body>
