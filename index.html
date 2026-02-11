@@ -46,9 +46,7 @@
             font-weight: bold;
             background-color: #ff4b6e;
             color: white;
-            transition: transform 0.2s;
         }
-        #yesBtn:hover { transform: scale(1.1); }
 
         #noBtn {
             padding: 12px 35px;
@@ -58,13 +56,15 @@
             cursor: pointer;
             background-color: #f0f0f0;
             color: #888;
-            position: absolute;
+            position: fixed; /* Changed to fixed so it doesn't get lost in the card */
             z-index: 999;
             transition: 0.1s ease-out;
             font-weight: bold;
+            /* Initial position */
+            left: 55%; 
+            top: 50%;
         }
 
-        /* The Silly Phrases Styling */
         .phrase {
             position: fixed;
             color: #ff4b6e;
@@ -72,15 +72,13 @@
             font-size: 24px;
             pointer-events: none;
             z-index: 1000;
-            text-shadow: 3px 3px 0px #ffffff, -1px -1px 0px #ffffff, 1px -1px 0px #ffffff, -1px 1px 0px #ffffff;
-            animation: floatAndFade 2.5s forwards;
-            white-space: nowrap;
+            text-shadow: 2px 2px 0px white;
+            animation: floatAndFade 2s forwards;
         }
 
         @keyframes floatAndFade {
-            0% { opacity: 0; transform: scale(0.5) translateY(0); }
-            10% { opacity: 1; transform: scale(1.2) translateY(-10px); }
-            100% { opacity: 0; transform: scale(1) translateY(-120px); }
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-100px); }
         }
 
         .hidden { display: none; }
@@ -102,7 +100,7 @@
         <div id="successContainer" class="hidden">
             <span class="big-emoji">💖</span>
             <h1>Yay! Best Valentine's ever!</h1>
-            <img id="celebrationGif" src="https://media.tenor.com/pbGzvMIkSFcAAAPo/tkthao219-bubududu.gif" alt="Happy Bears">
+            <img id="celebrationGif" src="https://c.tenor.com/pbGzvMIkSFcAAAAC/tenor.gif" alt="Happy Bears">
         </div>
     </div>
 
@@ -112,54 +110,37 @@
         const askContainer = document.getElementById('askContainer');
         const successContainer = document.getElementById('successContainer');
         
-        const phrases = [
-            "Nice try diddy! 😂", 
-            "Wait! 🛑", 
-            "Error 404 🤖", 
-            "Not that one! ⬅️", 
-            "Almost had it!", 
-            "Try again! 😉", 
-            "Nope! 🙅‍♀️",
-            "Closer... 🤏"
-        ];
+        const phrases = ["Nice try diddy! 😂", "Wait! 🛑", "Error 404 🤖", "Try again! 😉", "Nope! 🙅‍♀️"];
 
         const moveButton = () => {
-            const maxX = window.innerWidth - noBtn.offsetWidth;
-            const maxY = window.innerHeight - noBtn.offsetHeight;
+            // This math ensures it stays inside the visible screen window
+            const padding = 50;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
             
-            const newX = Math.max(10, Math.random() * maxX);
-            const newY = Math.max(10, Math.random() * maxY);
+            const newX = Math.max(padding, Math.random() * maxX);
+            const newY = Math.max(padding, Math.random() * maxY);
 
             noBtn.style.left = `${newX}px`;
             noBtn.style.top = `${newY}px`;
 
-            // Spawn phrase at the button's location
             const phrase = document.createElement('div');
             phrase.className = 'phrase';
             phrase.innerText = phrases[Math.floor(Math.random() * phrases.length)];
             phrase.style.left = `${newX}px`;
-            phrase.style.top = `${newY}px`;
+            phrase.style.top = `${newY - 40}px`;
             
             document.body.appendChild(phrase);
-            setTimeout(() => phrase.remove(), 2500);
+            setTimeout(() => phrase.remove(), 2000);
         };
 
         noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); 
-            moveButton();
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
 
         yesBtn.addEventListener('click', () => {
             askContainer.classList.add('hidden');
             successContainer.classList.remove('hidden');
-            
-            confetti({
-                particleCount: 250,
-                spread: 100,
-                origin: { y: 0.6 },
-                colors: ['#ff4b6e', '#ff80ab', '#ffffff']
-            });
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
         });
     </script>
 </body>
