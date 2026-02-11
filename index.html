@@ -25,49 +25,43 @@
             max-width: 90%;
             width: 400px;
             z-index: 5;
+            position: relative;
         }
-        .big-emoji {
-            font-size: 80px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        h1 {
-            color: #ff4b6e;
-            font-size: 28px;
-            margin-bottom: 30px;
-        }
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            height: 50px;
-        }
-        button {
+        .big-emoji { font-size: 80px; margin-bottom: 10px; display: block; }
+        h1 { color: #ff4b6e; font-size: 28px; margin-bottom: 30px; }
+        #yesBtn {
             padding: 12px 35px;
             font-size: 18px;
             border: none;
             border-radius: 15px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
-        }
-        #yesBtn {
             background-color: #ff4b6e;
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 75, 110, 0.4);
+            transition: 0.2s;
         }
         #noBtn {
+            padding: 12px 35px;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
             background-color: #f0f0f0;
             color: #888;
-            position: absolute; /* Needed for the runaway effect */
+            position: absolute;
+            transition: 0.1s;
         }
+        .phrase {
+            position: absolute;
+            color: #ff4b6e;
+            font-weight: bold;
+            font-size: 14px;
+            pointer-events: none;
+            animation: fadeOut 1s forwards;
+        }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-20px); } }
         .hidden { display: none; }
-        #celebrationGif {
-            width: 100%;
-            max-width: 250px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
+        #celebrationGif { width: 100%; border-radius: 15px; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -76,16 +70,14 @@
         <div id="askContainer">
             <span class="big-emoji">💝</span>
             <h1>Isabella, will you be my valentine!</h1>
-            <div class="btn-container">
-                <button id="yesBtn">Yes!</button>
-                <button id="noBtn">No</button>
-            </div>
+            <button id="yesBtn">Yes!</button>
+            <button id="noBtn">No</button>
         </div>
 
         <div id="successContainer" class="hidden">
             <span class="big-emoji">💖</span>
             <h1>Yay! Best Valentine's ever!</h1>
-            <img id="celebrationGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5Mmt5Z3lyZzR1eXp5eXp5eXp5eXp5eXp5eXp5eXp5eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/c90m4619v7G11p5y49/giphy.gif" alt="Happy Dance">
+            <img id="celebrationGif" src="https://media.tenor.com/gU_p9Y5wXmYAAAAi/tkthao219-bubududu.gif" alt="Happy Dance">
         </div>
     </div>
 
@@ -94,34 +86,31 @@
         const yesBtn = document.getElementById('yesBtn');
         const askContainer = document.getElementById('askContainer');
         const successContainer = document.getElementById('successContainer');
+        const phrases = ["Nice try!", "Wait!!", "Wrong button!", "Are you sure?", "Think again!", "Error 404", "Not today!", "Nope!"];
 
-        // The "Runaway" logic - moves when hovered or touched
         const moveButton = () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
+
+            // Create silly phrase
+            const phrase = document.createElement('span');
+            phrase.className = 'phrase';
+            phrase.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            phrase.style.left = `${x}px`;
+            phrase.style.top = `${y - 20}px`;
+            document.body.appendChild(phrase);
+            setTimeout(() => phrase.remove(), 1000);
         };
 
         noBtn.addEventListener('mouseenter', moveButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevents clicking on mobile
-            moveButton();
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
 
-        // The "Yes" logic
         yesBtn.addEventListener('click', () => {
             askContainer.classList.add('hidden');
             successContainer.classList.remove('hidden');
-            
-            // Confetti Cannon!
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff4b6e', '#ff80ab', '#ffffff']
-            });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         });
     </script>
 </body>
